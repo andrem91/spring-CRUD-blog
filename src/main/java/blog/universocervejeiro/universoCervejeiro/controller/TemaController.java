@@ -15,44 +15,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import blog.universocervejeiro.universoCervejeiro.model.Postagem;
-import blog.universocervejeiro.universoCervejeiro.repository.PostagemRepository;
+import blog.universocervejeiro.universoCervejeiro.model.Tema;
+import blog.universocervejeiro.universoCervejeiro.repository.TemaRepository;
 
 @RestController
-@RequestMapping("/postagem")
+@RequestMapping("/tema")
 @CrossOrigin(value = "*", allowedHeaders = "*")
-public class PostagemController {
+public class TemaController {
 
 	@Autowired
-	private PostagemRepository repository;
+	private TemaRepository repository;
 
 	@GetMapping
-	public ResponseEntity<List<Postagem>> GetAll() {
+	public ResponseEntity<List<Tema>> getAll() {
 		return ResponseEntity.ok(repository.findAll());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Postagem> getById(@PathVariable Long id) {
+	public ResponseEntity<Tema> getById(@PathVariable long id) {
 		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
 	}
 
-	@GetMapping("/titulo/{titulo}")
-	public ResponseEntity<List<Postagem>> GetByTitulo(@PathVariable String titulo) {
-		return ResponseEntity.ok(repository.findAllByTituloContainingIgnoreCase(titulo));
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<List<Tema>> getByName(@PathVariable String nome) {
+		return ResponseEntity.ok(repository.findAllByDescricaoContainingIgnoreCase(nome));
 	}
 
 	@PostMapping
-	public ResponseEntity<Postagem> post(@RequestBody Postagem postagem) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(postagem));
+	public ResponseEntity<Tema> post(@RequestBody Tema tema) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(tema));
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<Postagem> put(@RequestBody Postagem postagem) {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(postagem));
+	public ResponseEntity<Tema> put(@RequestBody Tema tema) {
+		return ResponseEntity.ok(repository.save(tema));
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
+	public void delete(@PathVariable long id) {
 		repository.deleteById(id);
 	}
+
 }
