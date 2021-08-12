@@ -19,40 +19,46 @@ import blog.universocervejeiro.universoCervejeiro.model.Postagem;
 import blog.universocervejeiro.universoCervejeiro.repository.PostagemRepository;
 
 @RestController
-@RequestMapping("/postagem")
-@CrossOrigin(value = "*", allowedHeaders = "*")
+@RequestMapping("/postagens")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostagemController {
 
 	@Autowired
-	private PostagemRepository repository;
+	private PostagemRepository postagemRepository;
 
 	@GetMapping
-	public ResponseEntity<List<Postagem>> GetAll() {
-		return ResponseEntity.ok(repository.findAll());
+	public ResponseEntity<List<Postagem>> getAll() {
+		return ResponseEntity.ok(postagemRepository.findAll()); // OK = 200
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Postagem> getById(@PathVariable Long id) {
-		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
+	public ResponseEntity<Postagem> getById(@PathVariable long id) {
+		return postagemRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@GetMapping("/titulo/{titulo}")
-	public ResponseEntity<List<Postagem>> GetByTitulo(@PathVariable String titulo) {
-		return ResponseEntity.ok(repository.findAllByTituloContainingIgnoreCase(titulo));
+	public ResponseEntity<List<Postagem>> getByTitulo(@PathVariable String titulo) {
+		return ResponseEntity.ok(postagemRepository.findAllByTituloContainingIgnoreCase(titulo));
 	}
 
 	@PostMapping
-	public ResponseEntity<Postagem> post(@RequestBody Postagem postagem) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(postagem));
+	public ResponseEntity<Postagem> postPostagem(@RequestBody Postagem postagem) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<Postagem> put(@RequestBody Postagem postagem) {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(postagem));
+	public ResponseEntity<Postagem> putPostagem(@RequestBody Postagem postagem) {
+
+		return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		repository.deleteById(id);
+	public void deletePostagem(@PathVariable long id) {
+
+		postagemRepository.deleteById(id);
+
 	}
+
 }

@@ -1,4 +1,4 @@
-package blog.universocervejeiro.universoCervejeiro.seguranca;
+package blog.universocervejeiro.universoCervejeiro.security;
 
 import java.util.Collection;
 
