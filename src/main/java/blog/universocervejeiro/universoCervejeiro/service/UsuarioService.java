@@ -1,8 +1,6 @@
 package blog.universocervejeiro.universoCervejeiro.service;
 
 import java.nio.charset.Charset;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.Optional;
 
 import org.apache.commons.codec.binary.Base64;
@@ -27,11 +25,6 @@ public class UsuarioService {
 		if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
 
-		int idade = Period.between(usuario.getDataNascimento(), LocalDate.now()).getYears();
-
-		if (idade < 18)
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário menor de 18 anos", null);
-
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		String senhaEncoder = encoder.encode(usuario.getSenha());
@@ -44,11 +37,6 @@ public class UsuarioService {
 	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
 
 		if (usuarioRepository.findById(usuario.getId()).isPresent()) {
-
-			int idade = Period.between(usuario.getDataNascimento(), LocalDate.now()).getYears();
-
-			if (idade < 18)
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário menor de 18 anos", null);
 
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -78,6 +66,8 @@ public class UsuarioService {
 				usuarioLogin.get().setId(usuario.get().getId());
 				usuarioLogin.get().setNome(usuario.get().getNome());
 				usuarioLogin.get().setSenha(usuario.get().getSenha());
+				usuarioLogin.get().setFoto(usuario.get().getFoto());
+				usuarioLogin.get().setTipo(usuario.get().getTipo());
 				usuarioLogin.get().setToken(authHeader);
 
 				return usuarioLogin;
